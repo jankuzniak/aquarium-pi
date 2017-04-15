@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aquarium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="stylesheet" href="bootstrap.min.css" media="screen">
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=7knzeXw5bA">
+<link rel="icon" type="image/png" href="/favicon-32x32.png?v=7knzeXw5bA" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png?v=7knzeXw5bA" sizes="16x16">
+<link rel="manifest" href="/manifest.json?v=7knzeXw5bA">
+<link rel="mask-icon" href="/safari-pinned-tab.svg?v=7knzeXw5bA" color="#5bbad5">
+<link rel="shortcut icon" href="/favicon.ico?v=7knzeXw5bA">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body>
+	<h1>Aquarium</h1>
+	<div class="container">
+		<div id="light">loading</div>
+	</div>
+
+	<script id="lightTemplate" type="text/x-handlebars-template">
+		<div>white: {{white}}%</div>
+		<div class="progress">
+			<div class="progress-bar progress-bar-info" style="width: {{white}}%;"></div>
+		</div>
+		<div class="btn-group btn-group-justified">
+ 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="off">OFF</a>
+ 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="minus">-</a>
+  			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="plus">+</a>
+ 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="on">ON</a>
+		</div>
+
+		<div>purple: {{purple}}%</div>
+		<div class="progress">
+			<div class="progress-bar progress-bar-info" style="width: {{purple}}%;"></div>
+		</div>
+		<div class="btn-group btn-group-justified">
+ 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="off">OFF</a>
+ 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="minus">-</a>
+  			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="plus">+</a>
+ 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="on">ON</a>
+		</div>
+	</script>
+	<script src="/js/jquery-3.2.1.min.js"></script>
+	<script src="/js/underscore-min.js"></script>
+	<script src="/js/handlebars-min.js"></script>
+	<script src="/js/backbone-min.js"></script>
+	<script type="text/javascript">
+		// bind light status endpoint
+		var Light = Backbone.Model.extend({
+			urlRoot : "/api/light",
+			defaults : {
+				white : 0,
+				purple : 0
+			}
+		});
+
+		var light = new Light({});
+		// refresh status every second
+		window.setInterval(function() {
+			light.fetch();
+		}, 1000);
+
+		// view
+		var AppView = Backbone.View.extend({
+			el : '#light',
+			template : Handlebars.compile($('#lightTemplate').html()),
+			model : light,
+
+			initialize : function() {
+				this.render();
+				if (this.model) {
+					this.model.on('change', this.render, this);
+					console.log(this.model);
+				}
+			},
+
+			render : function() {
+				this.$el.html(this.template(this.model.toJSON()));
+				return this;
+			},
+
+			events : {
+				"click .btn-color-control" : "controlColor",
+			},
+
+			controlColor : function(e) {
+				e.preventDefault();
+				var colorAttribute = e.target.getAttribute("data-color");
+				var opAttribute = e.target.getAttribute("data-op");
+				console.log(colorAttribute + " / " + opAttribute)
+
+				var color = light.get(colorAttribute);
+				switch (opAttribute) {
+				case "off":
+					color = 0;
+					console.log("color: " + color);
+					break;
+				case "minus":
+					color = Math.max(color - 10, 0);
+					console.log("color: " + color);
+					break;
+				case "plus":
+					color = Math.min(color + 10, 100);
+					console.log("color: " + color);
+					break;
+				case "on":
+					color = 100;
+					console.log("color: " + color);
+					break;
+				}
+
+				switch (colorAttribute) {
+				case "white":
+					light.set({
+						"white" : color
+					});
+					break;
+				case "purple":
+					light.set({
+						"purple" : color
+					});
+					break;
+				}
+				console.log(light);
+				light.save();
+			}
+		});
+
+		var appView = new AppView();
+	</script>
+</body>

@@ -3,15 +3,15 @@ package pl.kuzniak;
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.SoftPwm;
 
-public class LedController {
+public class LedDriver {
 	// https://projects.drogon.net/raspberry-pi/wiringpi/pins/
 	private static final int WHITE_PIN_NUMBER = 26;
 	private static final int PURPLE_PIN_NUMBER = 27;
 
-	private Light light;
+	private Light currentLight;
 
 	public void init() {
-		light = new Light();
+		currentLight = new Light();
 		// initialize wiringPi library, this is needed for PWM
 		Gpio.wiringPiSetup();
 
@@ -24,21 +24,21 @@ public class LedController {
 		System.out.println("writing " + newLight);
 		SoftPwm.softPwmWrite(WHITE_PIN_NUMBER, newLight.white);
 		SoftPwm.softPwmWrite(PURPLE_PIN_NUMBER, newLight.purple);
-		light.white = newLight.white;
-		light.purple = newLight.purple;
+		currentLight.white = newLight.white;
+		currentLight.purple = newLight.purple;
 	}
 
 	public void fadeLight(Light newLight, int seconds) {
 		System.out.println("writing " + newLight);
 		if (seconds > 0) {
 			float intervals = 100.0f * seconds;
-			float deltaWhite = (newLight.white - light.white) / intervals;
-			float deltaPurple = (newLight.purple - light.purple) / intervals;
+			float deltaWhite = (newLight.white - currentLight.white) / intervals;
+			float deltaPurple = (newLight.purple - currentLight.purple) / intervals;
 			for (int i = 0; i < seconds * 100; i++) {
-				int white = light.white + Math.round(i * deltaWhite);
+				int white = currentLight.white + Math.round(i * deltaWhite);
 				white = Math.min(100, white);
 				white = Math.max(0, white);
-				int purple = light.purple + Math.round(i * deltaPurple);
+				int purple = currentLight.purple + Math.round(i * deltaPurple);
 				purple = Math.min(100, purple);
 				purple = Math.max(0, purple);
 				// System.out.printf("writing %3d / %3d\n", white, purple);
@@ -52,10 +52,14 @@ public class LedController {
 				}
 			}
 		}
-		light.white = newLight.white;
-		light.purple = newLight.purple;
-		SoftPwm.softPwmWrite(WHITE_PIN_NUMBER, light.white);
-		SoftPwm.softPwmWrite(PURPLE_PIN_NUMBER, light.purple);
+		currentLight.white = newLight.white;
+		currentLight.purple = newLight.purple;
+		SoftPwm.softPwmWrite(WHITE_PIN_NUMBER, currentLight.white);
+		SoftPwm.softPwmWrite(PURPLE_PIN_NUMBER, currentLight.purple);
 		System.out.println("done writing " + newLight);
+	}
+
+	public Light getCurrentLight() {
+		return currentLight;
 	}
 }

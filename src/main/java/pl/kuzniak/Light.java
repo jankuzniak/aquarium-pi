@@ -7,52 +7,26 @@ public class Light {
 	public int white;
 	public int purple;
 
-	public static int normalise(int brightness) {
+	private static int normalise(int brightness) {
 		return Math.min(MAX, Math.max(MIN, brightness));
 	}
 
-	public void off() {
-		off(Colour.WHITE);
-		off(Colour.PURPLE);
+	public void setWhite(int brightness) {
+		white = normalise(brightness);
+	}
+
+	public void setPurple(int brightness) {
+		purple = normalise(brightness);
 	}
 
 	public void on() {
-		on(Colour.WHITE);
-		on(Colour.PURPLE);
+		setWhite(MAX);
+		setPurple(MAX);
 	}
 
-	public void on(Colour c) {
-		switch (c) {
-		case WHITE:
-			white = MAX;
-			break;
-		case PURPLE:
-			purple = MAX;
-			break;
-		}
-	}
-
-	public void on(Colour c, int brightness) {
-		int b = normalise(brightness);
-		switch (c) {
-		case WHITE:
-			white = b;
-			break;
-		case PURPLE:
-			purple = b;
-			break;
-		}
-	}
-
-	public void off(Colour c) {
-		switch (c) {
-		case WHITE:
-			white = MIN;
-			break;
-		case PURPLE:
-			purple = MIN;
-			break;
-		}
+	public void off() {
+		setWhite(MIN);
+		setPurple(MIN);
 	}
 
 	@Override
