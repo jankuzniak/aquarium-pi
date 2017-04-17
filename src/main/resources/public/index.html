@@ -18,32 +18,36 @@
 
 </head>
 <body>
-	<h1>Aquarium</h1>
 	<div class="container">
+		<h1>Aquarium</h1>
 		<div id="light">loading</div>
 	</div>
 
 	<script id="lightTemplate" type="text/x-handlebars-template">
-		<div>white: {{white}}%</div>
-		<div class="progress">
-			<div class="progress-bar progress-bar-info" style="width: {{white}}%;"></div>
-		</div>
-		<div class="btn-group btn-group-justified">
- 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="off">OFF</a>
- 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="minus">-</a>
-  			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="plus">+</a>
- 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="on">ON</a>
+		<h3>white: {{white}}%</h3>
+		<div class="bs-component">
+			<div class="progress">
+				<div class="progress-bar progress-bar-info" style="width: {{white}}%;"></div>
+			</div>
+			<div class="btn-group btn-group-justified">
+	 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="off">OFF</a>
+	 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="minus">-</a>
+	  			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="plus">+</a>
+	 			<a href="#" class="btn btn-default btn-color-control" data-color="white" data-op="on">ON</a>
+			</div>
 		</div>
 
-		<div>purple: {{purple}}%</div>
-		<div class="progress">
-			<div class="progress-bar progress-bar-info" style="width: {{purple}}%;"></div>
-		</div>
-		<div class="btn-group btn-group-justified">
- 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="off">OFF</a>
- 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="minus">-</a>
-  			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="plus">+</a>
- 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="on">ON</a>
+		<h3>purple: {{purple}}%</h3>
+		<div class="bs-component">
+			<div class="progress">
+				<div class="progress-bar progress-bar-info" style="width: {{purple}}%;"></div>
+			</div>
+			<div class="btn-group btn-group-justified">
+	 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="off">OFF</a>
+	 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="minus">-</a>
+	  			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="plus">+</a>
+	 			<a href="#" class="btn btn-default btn-color-control" data-color="purple" data-op="on">ON</a>
+			</div>
 		</div>
 	</script>
 	<script src="/js/jquery-3.2.1.min.js"></script>
