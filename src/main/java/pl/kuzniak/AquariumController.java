@@ -25,7 +25,7 @@ public class AquariumController {
 		// HandlebarsTemplateEngine());
 
 		get("/api/light", (req, res) -> {
-			return aquariumService.getCurrentLight();
+			return aquariumService.getLight();
 		}, gson::toJson);
 
 		post("/api/light", (req, res) -> {
